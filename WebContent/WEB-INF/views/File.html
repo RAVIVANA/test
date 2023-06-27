@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Railway Reservation</title>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" ></script>
+</head>
+<body>
+<center>
+<h1>Train Data
+</h1>
+</center>
+<center>
+<center>
+<script >  
+function fun2(){  
+	$.ajax({
+		url:'Fromto',
+		method:'GET',
+		success: function (resultText) {
+            $('#results').html(resultText);
+            $('#resultss').html(resultText);
+            
+         },
+         error: function (jqXHR, exception) {
+             console.log('Error occured!!');
+          }
+	})
+	
+
+} 
+</script>
+<script>
+function valu(){
+	 textField = document.getElementById("f");
+	  textField.value =document.getElementById("results").value ;
+	  textField1 = document.getElementById("t");
+	  textField1.value =document.getElementById("resultss").value ;
+		 textField2 = document.getElementById("from");
+		  textField2.value =document.getElementById("results").value ;
+		  textField3 = document.getElementById("to");
+		  textField3.value =document.getElementById("resultss").value ;
+	  fun();
+}
+</script>
+From:<input type="text" oninput="fun2()" name="from" id="f"/><Select id="results" onchange="valu()">
+</Select>
+to:<input type="text" oninput="fun2()" name="to" id="t"/><Select id="resultss" onchange="valu()">
+</Select>
+</center><br><br>
+<script>
+function fun(){
+	var from=$('#results').val();
+	var to=$('#resultss').val();
+	$.ajax({
+		url:'Train',
+		method:'POST',
+		data:{
+			from:from,to:to
+		},
+        success: function (resultText) {
+            $('#result').html(resultText);
+         },
+         error: function (jqXHR, exception) {
+             console.log('Error occured!!');
+          }
+	})
+}
+</script>
+
+<select id="result" onchange="pass()">
+</select><br><br>
+
+<script>
+
+function fun1(){
+	  for(var i=1;i<=5;i++)  {
+		v="pname"+i;
+		v1="page"+i;
+		v2="pgender"+i;
+		
+	var tno=document.getElementById("tno") .value;
+	var tname=document.getElementById("tname").value;
+	var pname=document.getElementById(v).value;
+	var page=document.getElementById(v1).value;
+	var pgender=document.getElementById(v2).value;
+	
+    
+	$.ajax({
+		url:'Passenger',
+		method:'POST',
+		data:{
+			tno:tno,tname:tname,pname:pname,page:page,pgender:pgender
+		},
+        success: function (resultText) {
+              $('#save').html(resultText);
+         },
+         error: function (jqXHR, exception) {
+             console.log('Error occured!!');
+          }
+	})
+	  }
+}
+</script>
+<form action="Fare" method="post">
+<h1>Passenger Reservation</h1>
+From:<input type="text" id="from" name="f"/>
+to:<input type="text" id="to" name="t"/>
+Train No:<input type="text" id="tno" name="tno"/>
+Train Name:<input type="text" id="tname" name="tname"/><br>
+Train class:<input type="text" id="clss" name="clss" oninput="clas()"/><select id="cls" onchange="update()"></select><br>
+<br>
+
+passenger Name:<input type="text" name="pname1"  />
+passenger age:<input type="text" name="page1"  />
+passenger gender:<input type="text" name="pgender1"/><br>
+passenger Name:<input type="text" name="pname2" />
+passenger age:<input type="text" name="page2" />
+passenger gender:<input type="text" name="pgender2"  /><br>
+passenger Name:<input type="text" name="pname3" />
+passenger age:<input type="text" name="page3"  o/>
+passenger gender:<input type="text" name="pgender3" /><br>
+passenger Name:<input type="text" name="pname4"  />
+passenger age:<input type="text" name="page4"  />
+passenger gender:<input type="text" name="pgender4"  /><br>
+passenger Name:<input type="text" name="pname5"  />
+passenger age:<input type="text" name="page5"  />
+passenger gender:<input type="text" name="pgender5"  /><br>
+<input type="submit" value="login"/></form>
+
+
+
+<script>
+function pass(){
+	var st=document.getElementById("result").value;
+	
+	var my=st.split(',');
+	
+	document.getElementById("tno").value=my[0];
+	document.getElementById("tname").value=my[1];
+
+	
+}
+function update(){
+	var st=document.getElementById("cls").value;
+	document.getElementById("clss").value=st;
+}
+
+</script>
+<script>
+function clas(){
+	var tno=$('#tno').val();
+
+
+	$.ajax({
+		url:'TrainReserve',
+		method:'POST',
+		data:{
+			tno:tno
+		},
+        success: function (resultText) {
+               $('#cls').html(resultText);
+         },
+         error: function (jqXHR, exception) {
+             console.log('Error occured!!');
+          }
+	})
+}
+	
+
+</script>
+</body>
+</html>

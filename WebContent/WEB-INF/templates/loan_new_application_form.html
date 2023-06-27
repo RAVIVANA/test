@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Loan Application Form</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+      .custom-table {
+    display: flex;
+    flex-wrap: wrap;
+  }
+     .custom-table td {
+    border: none; /* Remove borders from table cells */
+  }
+
+  .custom-table td {
+    flex: 0 0 50%;
+    max-width: 70%;
+    box-sizing: border-box;
+    padding: 8px;
+    
+  }
+
+     table {
+    margin-bottom: 20px;
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+  }
+  
+  /* Add left spacing */
+  table td:first-child {
+    padding-left: 20px;
+  }
+
+
+    body {
+      margin: 0;
+      background-color: #f8f8f8;
+   	 margin-bottom: 20px;
+    }
+
+	form {
+	  width: 80%;
+	  margin: 0 auto;
+	  padding-bottom: 10px;
+	}
+
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    input[type="file"],
+    textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      margin-top: 5px;
+    }
+
+    textarea {
+      height: 80px;
+    }
+    
+        input[type="submit"],
+	button {
+  background-color: #fff;
+  color: #003366;
+  padding: 6px 12px; /* Adjust the padding to make the buttons smaller */
+  font-size: 14px; /* Adjust the font size as needed */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+ input[type="submit"],
+button:hover {
+  background-color: #003366;
+  color: #fff;
+}
+	
+
+    .hidden {
+      display: none;
+    }
+      /* Add hover effect to Next button */
+  .btn-primary:hover {
+    background-color: #003366 !important;
+  }
+  #successMessage {
+            text-align: center;
+            margin-top: 20px;
+            font-weight: bold;
+            color: #003366;
+            display: none;
+        }
+  </style>
+
+</head>
+<body>
+<from id="first-form" class="hidden" >
+  <table class="table custom-table">
+    <h2>Loan Application Form</h2>
+    <tr>
+      <td>
+        <label for="cust_id">Customer ID:</label>
+      </td>
+      <td>
+        <input type="text" id="apcust_id" name="apcust_id" required>
+      </td>
+      <td></td>
+      <td>
+        <label for="apdate">Application Date:</label>
+      </td>
+      <td>
+        <input type="date" id="apdate" name="apdate" required>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label for="lnty_id">Loan Type ID:</label>
+      </td>
+      <td>
+        <input type="text" id="lnty_id" name="lnty_id" required>
+      </td><td></td>
+      <td>
+        <label for="amount">Loan Amount:</label>
+      </td>
+      <td>
+        <input type="text" id="amount" name="amount" required>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label for="intrest">Interest:</label>
+      </td>
+      <td>
+        <input type="text" id="intrest" name="intrest" required>
+      </td>
+      <td></td>
+      <td>
+        <label for="emilimitfrom">EMI Limit From:</label>
+      </td>
+      <td>
+        <input type="text" id="emilimitfrom" name="emilimitfrom" required>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label for="emilimitto">EMI Limit To:</label>
+      </td>
+      <td>
+        <input type="text" id="emilimitto" name="emilimitto" required>
+      </td>
+      <td></td>
+      <td>
+        <label for="tenure_requested">Tenure Requested:</label>
+      </td>
+      <td>
+        <input type="text" id="tenure_requested" name="tenure_requested" required>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label for="nominee">Nominee:</label>
+      </td>
+      <td>
+        <input type="text" id="nominee" name="nominee" required>
+      </td>
+      <td></td>
+      <td>
+        <label for="createdby">Created By:</label>
+      </td>
+      <td>
+        <input type="text" id="createdby" name="createdby" required>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label for="createddate">Created Date:</label>
+      </td>
+      
+      <td>
+        <input type="date" id="createddate" name="createddate" required>
+      </td>
+      <td></td>
+      <td>
+        <label for="processedby">Processed By:</label>
+      </td>
+      <td>
+        <input type="text" id="processedby" name="processedby" required>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label for="processdate">Process Date:</label>
+      </td>
+      <td>
+        <input type="date" id="processdate" name="processdate" required>
+      </td>
+      <td></td>
+      <td>
+        <label for="processedstatus">Processed Status:</label>
+      </td>
+      <td>
+        <input type="text" id="processedstatus" name="processedstatus" required>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label for="luudate">Last Updated Date:</label>
+      </td>
+      <td>
+        <input type="date" id="luudate" name="luudate" required>
+      </td>
+      <td></td>
+      <td>
+        <label for="luuser">Last Updated User:</label>
+      </td>
+      <td>
+        <input type="text" id="luuser" name="luuser" required>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label for="status">Status:</label>
+      </td>
+      <td>
+        <input type="text" id="status" name="status" required>
+      </td>
+      <td></td>
+      <td>
+        <label for="remarks">Remarks:</label>
+      </td>
+      <td>
+        <textarea id="remarks" name="remarks" rows="4" required></textarea>
+      </td>
+    </tr>
+  </table>
+  <label for="attachment">Attachment:</label>
+  <input type="file" id="attachment" name="attachment">
+  <button type="button" onclick="submit()" class="btn btn-primary">submit</button>
+   <div id="successMessage"></div>
+  
+</from>
+
+
+
+<form id="second-form" >
+  <table class="table custom-table">
+    <h2 style="text-align: center;">Customer Details Form</h2>
+    <tr>
+      <td>Customer ID:</td>
+      <td><input type="number" id="cust_id" name="cust_id" class="form-control"></td>
+    </tr>
+    <tr>
+      <td>Customer Title:</td>
+      <td><input type="text" id="cust_title" name="cust_title" class="form-control"></td>
+    </tr>
+    <tr>
+      <td>Customer Type:</td>
+      <td><input type="text" id="cust_type" name="cust_type" class="form-control"></td>
+    </tr>
+    <tr>
+      <td>Customer Current Address:</td>
+      <td><input type="text" id="cust_caddress" name="cust_caddress" class="form-control"></td>
+    </tr>
+    <tr>
+      <td>Customer Current PIN Code:</td>
+      <td><input type="text" id="cust_capincode" name="cust_capincode" class="form-control"></td>
+    </tr>
+    <tr>
+      <td>Customer Date of Birth:</td>
+      <td><input type="date" id="cust_dob" name="cust_dob" class="form-control"></td>
+    </tr>
+    <tr>
+      <td>Customer Mobile 1:</td>
+      <td><input type="text" id="cust_mobile1" name="cust_mobile1" class="form-control"></td>
+    </tr>
+    <tr>
+      <td>Customer Mobile 2:</td>
+      <td><input type="text" id="cust_mobile2" name="cust_mobile2" class="form-control"></td>
+    </tr>
+    <tr>
+      <td>Customer Residence Phone:</td>
+      <td><input type="text" id="cust_rphone" name="cust_rphone" class="form-control"></td>
+    </tr>
+    <tr>
+      <td>Customer Residence Address:</td>
+      <td><input type="text" id="cust_raddress" name="cust_raddress" class="form-control"></td>
+    </tr>
+  </table>
+ <button type="button" onclick="submit2()">Submit</button>
+ </form>
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script>
+  function Next(){
+	  document.getElementById("second-form").classList.add("hidden");
+      document.getElementById("first-form").classList.remove("hidden");
+  }
+
+    function submit() {
+      var customerId = document.getElementById("apcust_id").value;
+      var applicationDate = document.getElementById("apdate").value;
+      var loanTypeId = document.getElementById("lnty_id").value;
+      var loanAmount = document.getElementById("amount").value;
+      var interest = document.getElementById("intrest").value;
+      var emiLimitFrom = document.getElementById("emilimitfrom").value;
+      var emiLimitTo = document.getElementById("emilimitto").value;
+      var tenureRequested = document.getElementById("tenure_requested").value;
+      var nominee = document.getElementById("nominee").value;
+      var createdBy = document.getElementById("createdby").value;
+      var createdDate = document.getElementById("createddate").value;
+      var processedBy = document.getElementById("processedby").value;
+      var processDate = document.getElementById("processdate").value;
+      var processedStatus = document.getElementById("processedstatus").value;
+      var lastUpdatedDate = document.getElementById("luudate").value;
+      var lastUpdatedUser = document.getElementById("luuser").value;
+      var status = document.getElementById("status").value;
+      var remarks = document.getElementById("remarks").value;
+      var attachment = document.getElementById("attachment").value;
+
+      console.log(attachment);
+      $.ajax({
+        url: 'NewloanApplication',
+        type: 'post',
+        data: {
+          CustId: customerId,
+          ApplicationDate: applicationDate,
+          LoanTypeId: loanTypeId,
+          Amount: loanAmount,
+          Intrest: interest,
+          EmiLimitFrom: emiLimitFrom,
+          EmiLimitTo: emiLimitTo,
+          TenureRequested: tenureRequested,
+          nominee: nominee,
+          CreatedBy: createdBy,
+          CreatedDate: createdDate,
+          ProcessedBy: processedBy,
+          ProcessDate: processDate,
+          ProcessedStatus: processedStatus,
+          LastUpdatedDate: lastUpdatedDate,
+          LastUpdatedUser: lastUpdatedUser,
+          status: status,
+          remarks: remarks,
+          Attachment: attachment
+        },
+        success: function(resultText) {
+        	  $('#successMessage').text(response).fadeIn();
+
+              setTimeout(function() {
+                  $('#successMessage').fadeOut();
+              }, 3000);
+
+              form.trigger('reset'); // Optional: Reset the form after successful submission
+          console.log('First form submitted successfully');
+        },
+        error: function(jqXHR, exception) {
+          console.log('Error occurred!');
+        }
+      });
+    }
+
+    function showFirstForm() {
+        document.getElementById("second-form").classList.add("hidden");
+        document.getElementById("first-form").classList.remove("hidden");
+      }
+
+    function submit2() {
+        document.getElementById('apcust_id').value=document.getElementById('cust_id').value;
+    	Next();
+    	 var custId = document.getElementById("cust_id").value;
+    	  var custTitle = document.getElementById("cust_title").value;
+    	  var custType = document.getElementById("cust_type").value;
+    	  var custCAddress = document.getElementById("cust_caddress").value;
+    	  var custCAPincode = document.getElementById("cust_capincode").value;
+    	  var custDOB = document.getElementById("cust_dob").value;
+    	  var custMobile1 = document.getElementById("cust_mobile1").value;
+    	  var custMobile2 = document.getElementById("cust_mobile2").value;
+    	  var custRPhone = document.getElementById("cust_rphone").value;
+    	  var custRAddress = document.getElementById("cust_raddress").value;
+
+    	 
+
+    	
+
+    	  // Make AJAX call to save the form data
+    	  $.ajax({
+    	    url: "customer_data_trail_save",
+    	    type: "POST",
+    	    data: {Id: custId,
+    	    	custTitle: custTitle,
+    	    	cust_type: custType,
+    	    	cust_caddress: custCAddress,
+    	    	cust_capincode: custCAPincode,
+    	    	cust_dob: custDOB,
+    	    	cust_mobile1: custMobile1,
+    	    	cust_mobile2: custMobile2,
+    	    	cust_rphone: custRPhone,
+    	    	cust_raddress: custRAddress},
+    	    success: function(response) {
+    	      // Handle success response
+    	      console.log("Form data saved successfully");
+    	    },
+    	    error: function(xhr, status, error) {
+    	      // Handle error response
+    	      console.log("Error occurred while saving form data");
+    	    }
+    	  });
+    }
+
+    function submitBothForms() {
+      submit();
+      submit2();
+    }
+  </script>
+</body>
+</html>

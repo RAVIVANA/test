@@ -1,0 +1,41 @@
+@charset "ISO-8859-1";
+/* Add your CSS styles here */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+nav {
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+  width: 200px; /* Set the width of the navigation menu */
+  height: 100%; /* Make the navigation menu fill the entire height */
+  position: fixed; /* Fix the position of the navigation menu */
+  left: 0; /* Position the navigation menu on the left side */
+}
+
+nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li {
+  display: block; /* Change to block to stack the menu items vertically */
+  margin-bottom: 10px; /* Add margin-bottom to create spacing between menu items */
+}
+
+nav ul li a {
+  display: block;
+  padding: 5px;
+  text-decoration: none;
+  color: #fff;
+}
+
+/* Add styles for the main content */
+.content {
+  margin-left: 200px; /* Add left margin to create space for the navigation menu */
+  padding: 20px;
+}

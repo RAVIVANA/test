@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" ></script>
+
+    <title>My Single-Page Application</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        /* CSS styles for sidebar and content layout */
+ 
+    /* CSS styles for sidebar and content layout */
+    #sidebar {
+        padding: 5px;
+        background-color: #111;
+        min-height: 100vh;
+    }
+   
+
+    #content {
+        padding: 20px;
+        background-color: #f8f9fa;
+        color: #333;
+    }
+    #r1 {
+        padding: 10px;
+        text-align: center;
+    }
+
+    /* Additional color styles for sidebar links */
+    #sidebar .nav-link {
+        color: #818181;
+    }
+
+    #sidebar .nav-link:hover {
+        color: #003366;
+        text-shadow: 0 0 10px #000;
+    }
+
+    /* CSS styles for top navigation bar */
+    #navbar {
+        background-color: #333;
+        color: #fff;
+        padding: 10px;
+    }
+  
+    #welcome {
+        font-size: 14px;
+        font-weight: bold;
+        margin-right: 10px;
+        display: inline-block;
+        text-align: center;
+        width: auto;
+    }
+
+    #logout {
+        font-size: 14px;
+        font-weight: bold;
+        color: #000; /* Update the color to black */
+        text-decoration: underline;
+        cursor: pointer;
+        margin-left: 10px;
+    }
+    .btn-primary {
+    color: #818181;
+    background-color:transparent;
+    border-color:transparent;
+}
+#container {
+  height: 400px; /* Set the desired height of the container */
+  overflow: hidden; /* Hide any overflow from the container */
+}
+
+#r1 {
+  padding: 10px;
+  text-align: center;
+  max-width: 600px;
+  overflow: scroll;
+  height: 100%; /* Set the height of the div to 100% of the parent container */
+}
+
+#r1::-webkit-scrollbar {
+  width: 20px; /* Increase the width of the scrollbar */
+}
+
+#r1::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 6px; /* Adjust the border-radius for a wider scrollbar */
+}
+
+#r1::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
+    .dropdown-menu li {
+		position: relative;
+		}
+		.dropdown-menu .dropdown-submenu {
+		display: none;
+		position: absolute;
+		left: 100%;
+		top: -7px;
+		}
+		.dropdown-menu .dropdown-submenu-left {
+		right: 100%;
+		left: auto;
+		}
+		.dropdown-menu > li:hover > .dropdown-submenu {
+		display: block;
+		}
+		
+</style>
+</head>
+<body>
+    <div id="header" class="container-fluid bg-dark text-white py-3 text-center">
+        <h1>Co-Operative Bank</h1>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <span id="welcome">Welcome!!!</span>
+            </div>
+            <div class="col-md-6 text-right">
+            <form action="logout" method="post">
+               <input type="submit" value="Logout">
+             </form>
+            </div>
+        </div>
+       <div class="row">
+    <div id="sidebar" class="col-md-3">
+        <nav>
+            <ul class="nav flex-column">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dashboard" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Dashboard
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="dashboard">
+                        <a class="dropdown-item" href="#Accounts_master_entry">Accounts_info</a>
+                        <a class="dropdown-item" href="#loan_master_entry">Loans_info</a>
+                    </div>
+                </li>
+
+              
+                <li class="nav-item dropdown">
+    <div class="dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="accountsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Accounts
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="accountsDropdown">
+            <li>
+                <a class="dropdown-item" href="#savings" >savings</a>
+                <ul class="dropdown-menu dropdown-submenu">
+                    <li>
+                        <a class="dropdown-item" href="#View_Accounts_savings" >View_Accounts</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="#View_Applications_Saving">View_Applications</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a class="dropdown-item" href="#current" >Current</a>
+                <ul class="dropdown-menu dropdown-submenu">
+                    <li>
+                        <a class="dropdown-item" href="#View_Accounts_current">View_Accounts</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="#View_Applications_Current">View_Applications</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a class="dropdown-item" href="#fixed-deposit">fixed</a>
+                <ul class="dropdown-menu dropdown-submenu">
+                    <li>
+                        <a class="dropdown-item" href="#View_Accounts_FixedDeposit">View_Accounts</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="#View_Applications_FixedDeposit">View_Applications</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</li>
+                       <li class="nav-item dropdown">
+    <div class="dropdown">
+        <div class="btn btn-primary dropdown-toggle" role="button" id="loansDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            loans
+        </div>
+        <ul class="dropdown-menu" aria-labelledby="loansDropdown">
+            <li>
+                <a class="dropdown-item" href="#Personal_Loans">Personal Loans</a>
+                <ul class="dropdown-menu dropdown-submenu">
+                    <li>
+                        <a class="dropdown-item" href="#View_PersonalLoans_Accounts" id="parent">View_Loan_Accounts</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="#View_PersonalLoans_Applications">View_Loan_Applications</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a class="dropdown-item" href="#Vehicle_Loan">Vehicle Loan</a>
+                <ul class="dropdown-menu dropdown-submenu">
+                    <li>
+                        <a class="dropdown-item" href="#View_VehicleLoan_Accounts" >View_Loan_Accounts</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="#View_VehicleLoan_Applications">View_Loan_Applications</a>
+                    </li>
+                                 
+                </ul>
+            </li>
+            <li>
+                <a class="dropdown-item" href="#Gold_Loan">Gold Loan</a>
+                <ul class="dropdown-menu dropdown-submenu">
+                    <li>
+                        <a class="dropdown-item" href="#View_GoldLoan_Accounts">View_Loan_Accounts</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="#View_GoldLoan_Applications">View_Loan_Applications</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a class="dropdown-item" href="#Mortgage_Loan">Mortgage_Loan</a>
+                <ul class="dropdown-menu dropdown-submenu">
+                    <li>
+                        <a class="dropdown-item" href="#View_MortgageLoan_Accounts">View_Loan_Accounts</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="#View_MortgageLoan_Applications">View_Loan_Applications</a>
+                    </li>
+                </ul>
+            </li>
+                   <li>
+                        <a class="dropdown-item" href="#redirected">View_redirectedLoan_Applications</a>
+                    </li>
+        </ul>
+    </div>
+</li>
+
+      
+                        
+                        
+         
+                        
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="transactionsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Transactions
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="transactionsDropdown">
+                              <a class="dropdown-item" href="#money_deposit">money_deposit</a>
+                                <a class="dropdown-item" href="#loan-repayment">loan_repayment</a>
+                                <a class="dropdown-item" href="#interest-deposit">interest-deposit</a> 
+                                <a class="dropdown-item" href="#money-withdrawl">money_withdrawl</a>
+                                <a class="dropdown-item" href="#loan-withdrawl">loan_withdrawl</a>
+                           </div>
+                        </li>
+                         <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="applications" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Applications_form
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="applications">
+                              <a class="dropdown-item" href="#Account_Application">Account_Application</a>
+                                <a class="dropdown-item" href="#Loan_Applicaton">Loan_Applicaton</a>
+                           </div>
+                        </li>
+                        
+                        <li class="nav-item"><a class="nav-link" href="#customers" >Customers</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="users" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                users
+                            </a>
+                          <div class="dropdown-menu" aria-labelledby="usersDropdown">
+                                <a class="dropdown-item" href="#list-users">List All Users</a>
+                                <a class="dropdown-item" href="#add-user">Add a User</a>
+                            </div>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="#p&l" >P&L</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="security" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Security
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="security">
+                                <a class="dropdown-item" href="#permission_management">permission_management</a>
+                            </div>
+                   
+                         <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="users" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Accountprocessing
+                            </a>
+                          <div class="dropdown-menu" aria-labelledby="usersDropdown">
+                                <a class="dropdown-item" href="#intrestcluclation">intrest caluclation</a>
+                                <a class="dropdown-item" href="#statementgeneration">statement generation</a>
+                            </div>
+                        </li>
+                        
+                       <li class="nav-item"><a class="nav-link" href="#audit_logs" >Audit Logs</a></li>
+                           
+                        </li>
+                        
+                        
+                    </ul>
+                </nav>
+            </div>
+           
+            
+    <div id="r1"></div>
+        </div>
+    </div>	
+
+    <script>
+        // Function to load content based on the hash in the URL
+        function loadContent() {
+            var contentDiv = document.getElementById("content");
+            var hash = window.location.hash;
+      	  document.getElementById('r1').innerHTML="";
+
+            if (hash === "#money_deposit") {
+               functionfordeposit();
+            } else if (hash === "#loan-repayment") {
+            	function_4_loan_repay();}
+             else if(hash === "#redirected") {
+            	 console.log("hello");
+                 	function_4_redirectedapplication();
+            } else if (hash === "#interest-deposit") {
+            	function_4_Interest_Deposit();
+            } else if (hash === "#money-withdrawl") {
+            	function_4_money_withdrawl();
+            } else if (hash === "#loan-withdrawl") {
+            	function_4_loan_withdrawl();
+            } else if (hash === "#customers") {
+            	function_4_customers();
+            } else if (hash === "#dashboard") {
+            	function_4_master_entry();
+            } else if (hash === "#intrestcluclation") {
+            	function_4_intrest_caluclation();
+            } 
+             else if (hash === "#statementgeneration") {
+             	function_4_Statement();
+             } 
+     //==================================================================================================================
+    	   else if (hash === "#Accounts_master_entry") {
+            	function_4_Accounts_master_entry();
+            }else if (hash === "#loan_master_entry") {
+            	function_4_loan_master_entry();
+            }else if (hash === "#list-users") {
+                listUsers();
+            } else if (hash === "#add-user") {
+                addUser();
+            } 
+     //=======================================================================================       
+           
+            	else if (hash === "#View_Applications_Saving") {
+            	var viewApplicationsHref = '#View_Applications_Saving';
+            	var parentHref = getParentLabelText(viewApplicationsHref);
+            	  function_4_View_Applications(parentHref);
+            	}else if (hash === "#View_Applications_Current") {
+                	var viewApplicationsHref = '#View_Applications_Current';
+                	var parentHref = getParentLabelText(viewApplicationsHref);
+                	  function_4_View_Applications(parentHref);
+                	  }
+            	else if (hash === "#View_Applications_FixedDeposit") {
+                	var viewApplicationsHref = '#View_Applications_FixedDeposit';
+                	var parentHref = getParentLabelText(viewApplicationsHref);
+                	  function_4_View_Applications(parentHref);
+                	  }
+            //=======================================================================
+            	else if (hash === "#View_Accounts_savings") {
+            	var viewApplicationsHref = '#View_Accounts_savings';
+            	var parentHref = getParentLabelText(viewApplicationsHref);
+            	function_4_View_Accounts(parentHref);
+            	}
+            	else if (hash === "#View_Accounts_current") {
+                	var viewApplicationsHref = '#View_Accounts_current';
+                	var parentHref = getParentLabelText(viewApplicationsHref);
+                	function_4_View_Accounts(parentHref);
+                	}
+            	else if (hash === "#View_Accounts_FixedDeposit") {
+                	var viewApplicationsHref = '#View_Accounts_FixedDeposit';
+                	var parentHref = getParentLabelText(viewApplicationsHref);
+                	function_4_View_Accounts(parentHref);
+                	}
+            	
+           //============================================================================== 
+            else if (hash === "#View_Loan_Accounts") {
+            	 function_4_View_Loan_Accounts();
+            }
+            else if (hash === "#View_PersonalLoans_Accounts") {
+            	var val="PL";
+           	 function_4_View_Loan_Accounts(val);}
+            else if (hash === "#View_VehicleLoan_Accounts") {
+            	var val="VL";
+           	 function_4_View_Loan_Accounts(val);}
+            else if (hash === "#View_GoldLoan_Accounts") {
+            	var val="GL";
+           	 function_4_View_Loan_Accounts(val);}
+            else if (hash === "#View_MortgageLoan_Accounts") {
+            	var val="ML";
+           	 function_4_View_Loan_Accounts(val);}
+            else if (hash === "#View_MortgageLoan_Applications") {
+            	var val="ML";
+            	function_4_View_Loan_Applications(val);
+            }
+            else if (hash === "#View_GoldLoan_Applications") {
+            	var val="GL";
+            	function_4_View_Loan_Applications(val);
+            }
+            else if (hash === "#View_VehicleLoan_Applications") {
+            	var val="VL";
+            	function_4_View_Loan_Applications(val);
+            }
+            else if (hash === "#View_PersonalLoans_Applications") {
+            	var val="PL";
+            	function_4_View_Loan_Applications(val);
+            }else if (hash === "#Account_Application") {
+            	function_4_Account_Application();
+            }else if (hash === "#Loan_Applicaton") {
+            	function_4_Loan_Applicaton();
+            }else if (hash === "#permission_management") {
+            	function_4_permission_management();
+            }else if (hash === "#audit_logs") {
+            	listAuditLogs();
+            }
+           
+    //======================================================================================================================
+            else {
+               
+                contentDiv.innerHTML = "<h1>           </h1><p>                                            </p>";
+            }
+        }
+
+        // Event listener to detect hash changes and load content accordingly
+        window.addEventListener("hashchange", loadContent);
+
+        // Load initial content based on the hash in the URL
+        loadContent();
+
+        // Function to handle logout button click
+        function logout() {
+            // Add your logout logic here
+           href.location="LoginPage";
+        }
+ // =============================================================================
+        	
+        	function listAuditLogs(){
+    	   
+         	 document.getElementById('r1').innerHTML="";
+         	  $.ajax({
+          	    url:'auditLogs',
+          	    method:'get',
+          	    success: function (resultText) {
+          	    	 $('#r1').html(resultText);
+          	    },
+          	    error: function (jqXHR, exception) {
+          	      console.log('Error occurred!');
+          	    }
+          	  })
+         	 
+         }
+        	
+            function  function_4_intrest_caluclation(){
+            	document.getElementById('r1').innerHTML="";
+            	  $.ajax({
+            	    url:'get_savings_accounts',
+            	    method:'get',
+            	    success: function (resultText) {
+            	    	 $('#r1').html(resultText);
+            	    },
+            	    error: function (jqXHR, exception) {
+            	      console.log('Error occurred!');
+            	    }
+            	  })
+            }
+        	
+   //    =============================================================================
+       
+        function functionfordeposit(){
+          	 document.getElementById('r1').innerHTML="";
+          	  $.ajax({
+          	    url:'moneydeposit',
+          	    method:'get',
+          	    success: function (resultText) {
+          	    	 $('#r1').html(resultText);
+          	    },
+          	    error: function (jqXHR, exception) {
+          	      console.log('Error occurred!');
+          	    }
+          	  })
+          }
+        //=================================================================
+      function listUsers() {
+            $.ajax({
+                url: 'mainUser',
+                method: 'get',
+                success: function (resultText) {
+                    $('#r1').html(resultText);
+                },
+                error: function (jqXHR, exception) {
+                    console.log('Error occurred!');
+                }
+            });
+        }
+
+        function addUser() {
+            $.ajax({
+                url: 'addUser',
+                method: 'post',
+                success: function (resultText) {
+                    $('#r1').html(resultText);
+                },
+                error: function (jqXHR, exception) {
+                    console.log('Error occurred!');
+                }
+            });
+        }
+        //================================================================
+        function function_4_loan_repay(){
+         	 document.getElementById('r1').innerHTML="";
+         	  $.ajax({
+         	    url:'loanrepay',
+         	    method:'get',
+         	    success: function (resultText) {
+         	    	 $('#r1').html(resultText);
+         	    },
+         	    error: function (jqXHR, exception) {
+         	      console.log('Error occurred!');
+         	    }
+         	  })
+         }
+        function function_4_redirectedapplication(){
+        	 document.getElementById('r1').innerHTML="";
+        	  $.ajax({
+        	    url:'redirected',
+        	    method:'get',
+        	    success: function (resultText) {
+        	    	 $('#r1').html(resultText);
+        	    },
+        	    error: function (jqXHR, exception) {
+        	      console.log('Error occurred!');
+        	    }
+        	  })
+        }
+        function function_4_Interest_Deposit(){
+        	 document.getElementById('r1').innerHTML="";
+        	  $.ajax({
+        	    url:'interest',
+        	    method:'get',
+        	    success: function (resultText) {
+        	    	 $('#r1').html(resultText);
+        	    },
+        	    error: function (jqXHR, exception) {
+        	      console.log('Error occurred!');
+        	    }
+        	  })
+        }
+        function function_4_money_withdrawl(){
+       	 document.getElementById('r1').innerHTML="";
+       	  $.ajax({
+       	    url:'withdrawl',
+       	    method:'get',
+       	    success: function (resultText) {
+       	    	 $('#r1').html(resultText);
+       	    },
+       	    error: function (jqXHR, exception) {
+       	      console.log('Error occurred!');
+       	    }
+       	  })
+       }
+        //========================================================
+       function function_4_customers(){
+         	 document.getElementById('r1').innerHTML="";
+         	  $.ajax({
+         	    url:'customers',
+         	    method:'post',
+         	    success: function (resultText) {
+         	    	 $('#r1').html(resultText);
+         	    },
+         	    error: function (jqXHR, exception) {
+         	      console.log('Error occurred!');
+         	    }
+         	  })
+         }
+        //========================================================
+
+        function function_4_loan_withdrawl(){
+       	 document.getElementById('r1').innerHTML="";
+       	  $.ajax({
+       	    url:'lowid',
+       	    method:'get',
+       	    success: function (resultText) {
+       	    	 $('#r1').html(resultText);
+       	    },
+       	    error: function (jqXHR, exception) {
+       	      console.log('Error occurred!');
+       	    }
+       	  })
+       }
+        function function_4_master_entry(){
+          	 document.getElementById('r1').innerHTML="";
+          	  $.ajax({
+          	    url:'master',
+          	    method:'get',
+          	    success: function (resultText) {
+          	    	 $('#r1').html(resultText);
+          	    },
+          	    error: function (jqXHR, exception) {
+          	      console.log('Error occurred!');
+          	    }
+          	  })
+          }
+        //========================================================================================================
+        	function function_4_Accounts_master_entry(){
+          	 document.getElementById('r1').innerHTML="";
+          	  $.ajax({
+          	    url:'master_account',
+          	    method:'get',
+          	    success: function (resultText) {
+          	    	 $('#r1').html(resultText);
+          	    },
+          	    error: function (jqXHR, exception) {
+          	      console.log('Error occurred!');
+          	    }
+          	  })
+          }
+        
+        	function function_4_loan_master_entry(){
+             	 document.getElementById('r1').innerHTML="";
+             	  $.ajax({
+             	    url:'master_loan',
+             	    method:'get',
+             	    success: function (resultText) {
+             	    	 $('#r1').html(resultText);
+             	    },
+             	    error: function (jqXHR, exception) {
+             	      console.log('Error occurred!');
+             	    }
+             	  })
+             }
+        	//===================================================================
+        	function function_4_View_Accounts(parentHref){
+            	 document.getElementById('r1').innerHTML="";
+            	 var linkContent = parentHref;
+            	  $.ajax({
+            	    url:'Any_Type_account_info',
+            	    method:'post',
+            	    data:{hrefValue:linkContent},
+            	    success: function (resultText) {
+            	    	 $('#r1').html(resultText);
+            	    },
+            	    error: function (jqXHR, exception) {
+            	      console.log('Error occurred!');
+            	    }
+            	  })
+            }
+      //  	===================================================================
+       function getParentLabelText(viewApplicationsText) {
+		  var linkElement = $('a[href="' + viewApplicationsText + '"]');
+		  var parentLabelText = linkElement.closest('li').parent().prev('a.dropdown-item').text().trim();
+		  console.log(parentLabelText);
+		  return parentLabelText;
+		}
+//====================================================================
+
+
+
+      
+    	  function function_4_View_Applications(linkElement){
+            	 document.getElementById('r1').innerHTML="";
+                 var linkContent = linkElement;
+                 
+
+            	// Retrieve the href attribute value of the parent element
+            	
+            	  $.ajax({
+            	    url:'New_account_application',
+            	    method:'post',
+            	    data:{hrefValue:linkContent},
+            	    success: function (resultText) {
+            	    	 $('#r1').html(resultText);
+            	    },
+            	    error: function (jqXHR, exception) {
+            	      console.log('Error occurred!');
+            	    }
+            	  })
+            }
+        	//===================================================================================
+        	function function_4_View_Loan_Accounts(val){
+           	 document.getElementById('r1').innerHTML="";
+           	 var value=val;
+           	  $.ajax({
+           	    url:'Account',
+           	    method:'post',
+           	    data:{hrefValue:value},
+           	    success: function (resultText) {
+           	    	 $('#r1').html(resultText);
+           	    },
+           	    error: function (jqXHR, exception) {
+           	      console.log('Error occurred!');
+           	    }
+           	  })
+           }
+        	//===============================================================================
+       
+       	function function_4_Account_Application(){
+          	 document.getElementById('r1').innerHTML="";
+          	  $.ajax({
+          	    url:'Account_new_application_form',
+          	    method:'get',
+          	    success: function (resultText) {
+          	    	 $('#r1').html(resultText);
+          	    },
+          	    error: function (jqXHR, exception) {
+          	      console.log('Error occurred!');
+          	    }
+          	  })
+          }
+        	//===============================================================================================================
+       	function function_4_Loan_Applicaton(){
+          	 document.getElementById('r1').innerHTML="";
+          	  $.ajax({
+          	    url:'loan_new_application_form',
+          	    method:'get',
+          	    success: function (resultText) {
+          	    	 $('#r1').html(resultText);
+          	    },
+          	    error: function (jqXHR, exception) {
+          	      console.log('Error occurred!');
+          	    }
+          	  })
+          }
+     	function function_4_permission_management(){
+         	 document.getElementById('r1').innerHTML="";
+         	  $.ajax({
+         	    url:'permission_management',
+         	    method:'get',
+         	    success: function (resultText) {
+         	    	 $('#r1').html(resultText);
+         	    },
+         	    error: function (jqXHR, exception) {
+         	      console.log('Error occurred!');
+         	    }
+         	  })
+         }
+        //=========================================================================================================
+        		function function_4_View_Loan_Applications(val){
+           	 document.getElementById('r1').innerHTML="";
+           	 console.log(val);
+           	  $.ajax({
+           	    url:'get_applications',
+           	    method:'post',
+           	    data:{hrefValue:val},
+           	    success: function (resultText) {
+           	    	 $('#r1').html(resultText);
+           	    },
+           	    error: function (jqXHR, exception) {
+           	      console.log('Error occurred!');
+           	    }
+           	  })
+           }
+        //=========================================================================================================
+    </script>
+   
+
+    <!-- Include Bootstrap JS at the end to improve page load time -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>

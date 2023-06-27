@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Customer Submission Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="tel"],
+        input[type="file"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Customer Submission Form</h1>
+
+    <form action="sub" method="POST">
+        <label for="custTitle">Title:</label>
+        <input type="text" id="custTitle" name="custTitle"><br>
+
+        <label for="custType">Type:</label>
+        <select id="custType" name="custType">
+            <option value="">-- Select Type --</option>
+            <option value="REC">Recurrent</option>
+            <option value="CUR">Current</option>
+        </select><br>
+
+        <label for="custCAddress">Current Address:</label>
+        <input type="text" id="custCAddress" name="custCAddress"><br>
+
+        <label for="custCApincode">Current Address Pincode:</label>
+        <input type="text" id="custCApincode" name="custCApincode"><br>
+
+        <label for="custDOB">Date of Birth:</label>
+        <input type="date" id="custDOB" name="custDOB"><br>
+
+        <label for="custMobile1">Mobile 1:</label>
+        <input type="tel" id="custMobile1" name="custMobile1"><br>
+
+        <label for="custMobile2">Mobile 2:</label>
+        <input type="tel" id="custMobile2" name="custMobile2"><br>
+
+        <label for="custRPhone">Residence Phone:</label>
+        <input type="tel" id="custRPhone" name="custRPhone"><br>
+
+        <label for="custRAddress">Residence Address:</label>
+        <input type="text" id="custRAddress" name="custRAddress"><br>
+
+        <label for="custRApincode">Residence Address Pincode:</label>
+        <input type="text" id="custRApincode" name="custRApincode"><br>
+
+        <label for="custDocument">Document:</label>
+        <select id="custDocument" name="custDocument">
+            <option value="">-- Select Document --</option>
+            <option value="Aadhar">Aadhar Card</option>
+            <option value="PAN">PAN Card</option>
+            <option value="VoterID">Voter ID</option>
+            <option value="Passport">Passport</option>
+            <option value="DrivingLicense">Driving License</option>
+        </select><br>
+
+        <label for="custDocument1">Document:</label>
+        <input type="file" id="custDocument1" name="custDocument1"><br>
+
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Loan Applications</title>
+    <style>
+    	body {
+	    	font-family: Arial, sans-serif;
+	      height: 100%;
+	      padding-top:100px;
+	      padding-left:100px;
+	      justify-content: center;
+	      align-items: center;
+    	}
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .form-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            overflow: auto;
+        }
+
+        .form-container {
+            max-width: 500px;
+            margin: 100px auto;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-container label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .form-container input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        .form-container button {
+            padding: 8px 16px;
+            border: none;
+            background-color: #4CAF50;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .form-container button:hover {
+            background-color: #45a049;
+        }
+
+        h2 {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Loan Applications</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Customer ID</th>
+                <th>Application Date</th>
+                <th>Loan Type ID</th>
+                <th>Amount</th>
+                <th>EMI Limit From</th>
+                <th>EMI Limit To</th>
+                <th>Tenure Requested</th>
+                <th>Nominee</th>
+                <th>Created By</th>
+                <th>Created Date</th>
+                <th>Processed By</th>
+                <th>Process Date</th>
+                <th>Processed Status</th>
+                <th>Last Updated Date</th>
+                <th>Last Updated User</th>
+                <th>Status</th>
+                <th>Remarks</th>
+                <th>Document</th>
+                <th>intrest</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="loanApp : ${loanApplications}">
+                <td id="loanId" th:text="${loanApp.getId()}"></td>
+                <td th:text="${loanApp.getCustId()}"></td>
+                <td th:text="${loanApp.getApplicationDate()}"></td>
+                <td th:text="${loanApp.getLoanTypeId()}"></td>
+                <td th:text="${loanApp.getAmount()}"></td>
+                <td th:text="${loanApp.getEmiLimitFrom()}"></td>
+                <td th:text="${loanApp.getEmiLimitTo()}"></td>
+                <td th:text="${loanApp.getTenureRequested()}"></td>
+                <td th:text="${loanApp.getNominee()}"></td>
+                <td th:text="${loanApp.getCreatedBy()}"></td>
+                <td th:text="${loanApp.getCreatedDate()}"></td>
+                <td th:text="${loanApp.getProcessedBy()}"></td>
+                <td th:text="${loanApp.getProcessDate()}"></td>
+                <td th:text="${loanApp.getProcessedStatus()}"></td>
+                <td th:text="${loanApp.getLastUpdatedDate()}"></td>
+                <td th:text="${loanApp.getLastUpdatedUser()}"></td>
+                <td th:text="${loanApp.getStatus()}"></td>
+                <td th:text="${loanApp.getRemarks()}"></td>
+                <td th:text="${loanApp.getAttachment()}"></td>
+                <td th:text="${loanApp.getIntrest()}"></td>
+                
+                <td>
+                    <button onclick="editRow(this)">Edit</button>
+                    <button onclick="rejected()">Rejected</button>
+                    
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="form-popup" id="edit-popup">
+        <div class="form-container" id="edit-form-container">
+            <!-- Form fields will be dynamically generated here -->
+        </div>
+    </div>
+
+    <script>
+        function editRow(button) {
+            var row = button.parentNode.parentNode;
+            var accountId = row.id.split('-')[1];
+
+            var formContainer = document.getElementById('edit-form-container');
+            formContainer.innerHTML = '';
+
+            // Generate form fields dynamically
+            var formFields = [
+                { label: 'Customer ID', value: row.cells[1].textContent },
+                { label: 'Application Date', value: row.cells[2].textContent },
+                { label: 'Loan Type ID', value: row.cells[3].textContent },
+                { label: 'Amount', value: row.cells[4].textContent },
+                { label: 'EMI Limit From', value: row.cells[5].textContent },
+                { label: 'EMI Limit To', value: row.cells[6].textContent },
+                { label: 'Tenure Requested', value: row.cells[7].textContent },
+                { label: 'Nominee', value: row.cells[8].textContent },
+                { label: 'Created By', value: row.cells[9].textContent },
+                { label: 'Created Date', value: row.cells[10].textContent },
+                { label: 'Processed By', value: row.cells[11].textContent },
+                { label: 'Process Date', value: row.cells[12].textContent },
+                { label: 'Processed Status', value: row.cells[13].textContent },
+                { label: 'Last Updated Date', value: row.cells[14].textContent },
+                { label: 'Last Updated User', value: row.cells[15].textContent },
+                { label: 'Status', value: row.cells[16].textContent },
+                { label: 'Remarks', value: row.cells[17].textContent },
+                { label: 'Document', value: row.cells[18].textContent },
+                { label: 'interest', value: row.cells[19].textContent }
+            ];
+
+            formFields.forEach(function(field) {
+                var label = document.createElement('label');
+                label.textContent = field.label;
+
+                var input = document.createElement('input');
+                input.type = 'text';
+                input.value = field.value;
+
+                formContainer.appendChild(label);
+                formContainer.appendChild(input);
+            });
+
+            var saveButton = document.createElement('button');
+            saveButton.textContent = 'Save';
+            saveButton.onclick = function() {
+                saveFormData(accountId);
+            };
+
+            formContainer.appendChild(saveButton);
+
+            // Open the form popup
+            var popup = document.getElementById('edit-popup');
+            popup.style.display = 'block';
+        }
+
+        function saveFormData(accountId) {
+            // Retrieve updated values from the form fields
+            var formContainer = document.getElementById('edit-form-container');
+            var formInputs = formContainer.getElementsByTagName('input');
+            var updatedData = {};
+
+            for (var i = 0; i < formInputs.length; i++) {
+                var input = formInputs[i];
+                updatedData[input.previousSibling.textContent.trim()] = input.value;
+            }
+            console.log(updatedData['Customer ID']);
+            var ID =document.getElementById('loanId').textContent;
+      	    var customerId = updatedData['Customer ID'];
+            var applicationDate = updatedData['Application Date'];
+            var loanTypeId = updatedData['Loan Type ID'];
+            var loanAmount = updatedData['Amount'];
+            var interest=updatedData['interest'];
+            var emiLimitFrom = updatedData['EMI Limit From'];
+            var emiLimitTo = updatedData['EMI Limit To'];
+            var tenureRequested = updatedData['Tenure Requested'];
+            var nominee = updatedData['Nominee'];
+            var createdBy = updatedData['Created By'];
+            var createdDate = updatedData['Created Date'];
+            var processedBy = updatedData['Processed By'];
+            var processDate = updatedData['Process Date'];
+            var processedStatus = updatedData['Processed Status'];
+            var lastUpdatedDate = updatedData['Last Updated Date'];
+            var lastUpdatedUser = updatedData['Last Updated User'];
+            var status = updatedData['Status'];
+            var remarks = updatedData['Remarks'];
+            var attachment = updatedData['Document'];
+            
+            // Perform the AJAX request to update the data
+            $.ajax({
+                url: 'updateapplication',
+                type: 'post',
+                data: {ID:ID,
+                    CustId: customerId,
+                    ApplicationDate: applicationDate,
+                    LoanTypeId: loanTypeId,
+                    Amount: loanAmount,
+                    Intrest:interest,
+                    EmiLimitFrom: emiLimitFrom,
+                    EmiLimitTo: emiLimitTo,
+                    TenureRequested: tenureRequested,
+                    nominee: nominee,
+                    CreatedBy: createdBy,
+                    CreatedDate: createdDate,
+                    ProcessedBy: processedBy,
+                    ProcessDate: processDate,
+                    ProcessedStatus: processedStatus,
+                    LastUpdatedDate: lastUpdatedDate,
+                    LastUpdatedUser: lastUpdatedUser,
+                    status: status,
+                    remarks: remarks,
+                    Attachment: attachment
+                },
+                success: function(resultText) {
+                    $('#r1').html(resultText);
+                },
+                error: function(jqXHR, exception) {
+                    console.log('Error occurred!');
+                }
+            });
+
+            // Close the form popup
+            var popup = document.getElementById('edit-popup');
+            popup.style.display = 'none';
+        }
+        function rejected(){
+        	var row = event.target.parentNode.parentNode;
+            var loanId = row.cells[0].textContent;
+
+            // Send AJAX request to delete the row
+            $.ajax({
+                url: 'deleteloan',
+                type: 'post',
+                data: { loanId: loanId },
+                success: function(resultText) {
+                    // Remove the row from the table
+                    row.parentNode.removeChild(row);
+                },
+                error: function(jqXHR, exception) {
+                    console.log('Error occurred while deleting the row!');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

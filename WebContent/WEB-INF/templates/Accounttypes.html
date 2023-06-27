@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bank Account Selection</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+  <style>
+        .btn-custom {
+            width: 150px;
+            margin-right: 10px;
+        }
+           .center {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+            #co {
+            max-width: 400px;
+        }
+  #row {
+        padding-left: 80px;
+        display: flex;
+        justify-content: center;
+    }
+    </style>
+
+    <div class="container" id=" co">
+        <h1>Select Account Type</h1>
+        <div class="form-group">
+            <label for="accountType">Account Type:</label>
+            <select class="form-control" id="accountType" onchange="submitAccountType()">
+                <option value="savings">Savings Account</option>
+                <option value="fixed">Fixed Deposit</option>
+                <option value="recurrent">Recurring Deposit</option>
+            </select>
+        </div>
+    </div>
+    <div class="row" id="row">
+    </div>
+<div class="center">
+    <button class="hide" id="id" onclick="submit()">Calculate Interest</button>
+</div>    <!-- Include Bootstrap JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <script>
+        function submitAccountType() {
+        	
+            var accountType = document.getElementById("accountType").value;
+            switch (accountType) {
+            case "savings":
+            	   
+          	               $.ajax({
+          	                url:'get_savings',
+          	                 method:'get',
+          	                 data:{accountType:accountType},
+          	                success: function (resultText) {
+          	    	       $('#row').html(resultText);
+          	    	     document.getElementById("id").classList.add("hidden");
+          	    	       
+          	                },
+          	               error: function (jqXHR, exception) {
+          	                 console.log('Error occurred!');
+          	               }
+          	               })
+                 
+                console.log("Savings Account selected");
+                break;
+            case "fixed":
+	               $.ajax({
+     	                url:'get_accounts',
+     	                 method:'get',
+     	                 data:{accountType:accountType},
+     	                success: function (resultText) {
+     	    	       $('#row').html(resultText);
+        	    	     document.getElementById("id").classList.add("hidden");
+
+     	                },
+     	               error: function (jqXHR, exception) {
+     	                 console.log('Error occurred!');
+     	               }
+     	               })
+                console.log("Fixed Deposit selected");
+                break;
+            case "recurrent":
+	               $.ajax({
+     	                url:'get_accounts',
+     	                 method:'get',
+     	                 data:{accountType:accountType},
+     	                success: function (resultText) {
+     	    	       $('#row').html(resultText);
+        	    	     document.getElementById("id").classList.add("hidden");
+
+     	                },
+     	               error: function (jqXHR, exception) {
+     	                 console.log('Error occurred!');
+     	               }
+     	               })
+                console.log("Recurring Deposit selected");
+                break;
+            default:
+                break;   
+        }
+        
+        }
+        function submit() {
+            var accountType = document.getElementById("accountType").value;
+            console.log(accountType);
+                     $.ajax({
+          	                 url:'caluclateintrest',
+          	                 method:'get',
+          	                 data:{accountType:accountType},
+          	                success: function (resultText) {
+          	    	       $('#row').html(resultText);
+            	    	     document.getElementById("id").classList.add("hidden");
+            	    	     
+          	                },
+          	               error: function (jqXHR, exception) {
+          	                 console.log('Error occurred!');
+          	               }
+          	               })
+                 
+                console.log("Savings Account selected");
+        }
+    </script>
+
+</html>

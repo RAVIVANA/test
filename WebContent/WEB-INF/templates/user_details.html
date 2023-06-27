@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>User Management</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      border: 1px solid black;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    .edit-button, .delete-button {
+      padding: 4px;
+      cursor: pointer;
+    }
+    
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+    
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 300px;
+    }
+    
+    .modal input {
+      display: block;
+      margin-bottom: 10px;
+    }
+    
+    .modal button {
+      display: block;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1><u>User Management</u></h1>
+   <br></br>
+   <label for="designation">Designation:</label>
+<select id="designation" name="designation">
+  <option value="clerks">Clerks</option>
+  <option value="bankOfficers">Bank Officers</option>
+  <option value="accountProcessingOfficers">Account Processing Officers</option>
+  <option value="managers">Managers</option>
+</select>
+   <br></br>
+  <table id="userTable">
+    <tr>
+      <th>user_id</th>
+      <th>name</th>
+      <th>designation</th>
+      <th>user_email</th>
+      <th>Actions</th>
+    </tr>
+  </table>
+  
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+      <h2>Edit User</h2>
+      <form id="editForm">
+        <label for="newName">Name:</label>
+        <input type="text" id="newName" name="newName" required><br>
+        <label for="newDesignation">Designation:</label>
+        <input type="text" id="newDesignation" name="newDesignation" required><br>
+        <label for="newEmail">Email:</label>
+        <input type="email" id="newEmail" name="newEmail" required><br>
+        <button type="submit">Save</button>
+      </form>
+    </div>
+  </div>
+  
+  <script>
+    // Sample user data
+    var users = [
+      { user_id: 101, name: 'Maria Anders', designation: 'Clerks', user_email: 'mariaanders@mail.com' },
+      { user_id: 102, name: 'Francisco Chang', designation: 'Bank Officer', user_email: 'franciscochang@mail.com' },
+      { user_id: 103, name: 'Linus', designation: 'Account Processing users', user_email: 'linus@mail.com' },
+      { user_id: 104, name: 'Tobias', designation: 'Managers', user_email: 'tobias@mail.com' }
+    ];
+    
+    var table = document.getElementById("userTable");
+    var editModal = document.getElementById("editModal");
+    var editForm = document.getElementById("editForm");
+    var newNameInput = document.getElementById("newName");
+    var newDesignationInput = document.getElementById("newDesignation");
+    var newEmailInput = document.getElementById("newEmail");
+    
+    // Generate table rows with user data
+    for (var i = 0; i < users.length; i++) {
+      var user = users[i];
+      var row = table.insertRow();
+      
+      var userIdCell = row.insertCell();
+      userIdCell.textContent = user.user_id;
+      
+      var nameCell = row.insertCell();
+      nameCell.textContent = user.name;
+      
+      var designationCell = row.insertCell();
+      designationCell.textContent = user.designation;
+      
+      var emailCell = row.insertCell();
+      emailCell.textContent = user.user_email;
+      
+      var actionsCell = row.insertCell();
+      var editButton = document.createElement("button");
+      editButton.className = "edit-button";
+      editButton.textContent = "Edit";
+      editButton.addEventListener("click", function() {
+        openEditForm(this);
+      });
+      actionsCell.appendChild(editButton);
+      
+      var deleteButton = document.createElement("button");
+      deleteButton.className = "delete-button";
+      deleteButton.textContent = "Delete";
+      deleteButton.addEventListener("click", function() {
+        deleteRow(this);
+      });
+      actionsCell.appendChild(deleteButton);
+    }
+    
+    function openEditForm(button) {
+      var row = button.parentNode.parentNode;
+      var userId = row.cells[0].textContent;
+      var name = row.cells[1].textContent;
+      var designation = row.cells[2].textContent;
+      var email = row.cells[3].textContent;
+      
+      newNameInput.value = name;
+      newDesignationInput.value = designation;
+      newEmailInput.value = email;
+      
+      editModal.style.display = "block";
+      
+      editForm.onsubmit = function(event) {
+        event.preventDefault();
+        saveChanges(row);
+      };
+    }
+    
+    function saveChanges(row) {
+      var newName = newNameInput.value;
+      var newDesignation = newDesignationInput.value;
+      var newEmail = newEmailInput.value;
+      
+      // Update table with new values
+      row.cells[1].textContent = newName;
+      row.cells[2].textContent = newDesignation;
+      row.cells[3].textContent = newEmail;
+      
+      editModal.style.display = "none";
+      
+      console.log("Save: User ID=" + row.cells[0].textContent + ", Name=" + newName + ", Designation=" + newDesignation + ", Email=" + newEmail);
+    }
+    
+    function deleteRow(button) {
+      var row = button.parentNode.parentNode;
+      var userId = row.cells[0].textContent;
+      var name = row.cells[1].textContent;
+      var confirmation = confirm("Are you sure you want to delete User ID: " + userId + ", Name: " + name + "?");
+      if (confirmation) {
+        row.remove();
+        console.log("Delete: User ID=" + userId + ", Name=" + name);
+      }
+    }
+  </script>
+</body>
+</html>

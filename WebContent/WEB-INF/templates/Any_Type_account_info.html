@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <style>
+    h1 {
+    text-align: center;
+    margin-top: 0px;
+    font-size: 33px; /* Replace this value with the desired font size */
+   }
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      height: 100%;
+      padding-left:15px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      border: 1px solid #ccc;
+    }
+    
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+      word-break: break-all;
+      font-size: 14px;
+    }
+    
+    th {
+      background-color: #f2f2f2;
+      font-size: 16px;
+    }   
+     tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    tr:hover {
+      background-color: #f5f5f5;
+    }
+    
+    .form-popup {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 9999;
+      overflow: auto;
+    }
+    
+    .form-container {
+      max-width: 500px;
+      margin: 100px auto;
+      padding: 10px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    
+    .form-container label {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+    
+    .form-container input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 20px;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+    
+    .form-container button {
+      padding: 6px 10px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    
+    .form-container button:hover {
+      background-color: #45a049;
+    }
+    
+    h1 {
+      text-align: center;
+      margin-top: 20px;
+    }
+    
+    h2 {
+      font-size: 20px;
+    }
+    
+  .table-container {
+    max-height: 300px; /* Adjust the max-height as needed */
+  }
+
+  .table {
+    min-width: 100%;
+    table-layout: fixed;
+    overflow: scroll; /* Ensures the table layout remains fixed */
+  }
+    
+    .edit-button {
+    padding: 6px 10px;
+    background-color: green; /* Change to your desired green color */
+    color: white; /* Change to your desired text color */
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+
+  .edit-button:hover {
+    background-color: green; /* Change to your desired color on hover */
+  }
+    
+    .form-popup::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    .form-popup::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, 0.3);
+      border-radius: 3px;
+    }
+    
+    .form-popup::-webkit-scrollbar-thumb:hover {
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+    
+    .form-popup::-webkit-scrollbar-track {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <h2></h2>
+  <table>
+    <thead>
+      <tr>
+        <th>id</th>
+        <th>ActypeID</th>
+        <th>NomineeFirstName</th>
+        <th>NomineeLastName</th>
+        <th>CustomerID</th>
+        <th>CreateDate</th>
+        <th>CreatedBy</th>
+        <th>ProcessedBy</th>
+        <th>CustTitle</th>
+        <th>PhoneNo</th>
+        <th>Address</th>
+        <th>Balance</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="account, rowStat : ${list_of_account}" id="row-${rowStat.index + 1}">
+        <td data-column="acnt_acap_id" th:text="${account.getApplicationId()}"></td>
+        <td data-column="acnt_type_id" th:text="${account.getAccountTypeId()}"></td>
+        <td data-column="account_nominee_firstName" th:text="${account.getApplicationNomineeFirstName()}"></td>
+        <td data-column="account_nominee_lastName" th:text="${account.getApplicationNomineeLastName()}"></td>
+        <td data-column="acnt_cust_id" th:text="${account.getCustomerId()}"></td>
+        <td data-column="acnt_cdate" th:text="${account.getCreated_date()}"></td>
+        <td data-column="account_CreatedBy" th:text="${account.getCreatedBy()}"></td>
+        <td data-column="acnt_processedby" th:text="${account.getProcessedBy()}"></td>
+        <td data-column="customer_title" th:text="${list_of_customer[rowStat.index].getTitle()}"></td>
+        <td data-column="customer_phno" th:text="${list_of_customer[rowStat.index].getMobile1()}"></td>
+        <td data-column="customer_address" th:text="${list_of_customer[rowStat.index].getResidenceAddress()}"></td> 
+         <td data-column="account_balance" th:text="${account.getBalance()}"></td> 
+        
+        <td>
+          <button class="edit-button" onclick="editRow(this)">Edit</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Form Popup -->
+  <div class="form-popup" id="editForm">
+    <div class="form-container">
+      <h3>Edit Account</h3>
+      <label for="edit_acnt_acap_id" >acnt_acap_id:</label>
+      <input type="text" id="edit_acnt_acap_id" name="edit_acnt_acap_id" readonly>
+      <label for="edit_acnt_acty_id">acnt_acty_id:</label>
+      <input type="text" id="edit_acnt_acty_id" name="edit_acnt_acty_id" readonly>
+      <label for="edit_account_first_nominee">account_first_nominee:</label>
+      <input type="text" id="edit_account_first_nominee" name="edit_account_first_nominee" readonly>
+      <label for="edit_account_last_nominee">account_last_nominee:</label>
+      <input type="text" id="edit_account_last_nominee" name="edit_account_last_nominee" readonly>
+      <label for="edit_acnt_cust_id">acnt_cust_id:</label>
+      <input type="text" id="edit_acnt_cust_id" name="edit_acnt_cust_id" readonly>
+      <label for="edit_acnt_cdate">acnt_cdate:</label>
+      <input type="text" id="edit_acnt_cdate" name="edit_acnt_cdate" readonly>
+      <label for="edit_account_createdBy">account_createdBy:</label>
+      <input type="text" id="edit_account_createdBy" name="edit_account_createdBy" readonly>
+      <label for="edit_acnt_processedy">acnt_processedy:</label>
+      <input type="text" id="edit_acnt_processedy" name="edit_acnt_processedy" readonly>
+      <label for="edit_cust_Title">cust_Title:</label>
+      <input type="text" id="edit_cust_Title" name="edit_cust_Title">
+      <label for="edit_cust_phoneNo">cust_phoneNo:</label>
+      <input type="text" id="edit_cust_phoneNo" name="edit_cust_phoneNo">
+      <label for="edit_cust_Current_address">cust_Current_address:</label>
+      <input type="text" id="edit_cust_Current_address" name="edit_cust_Current_address">
+      <button type="button" onclick="updateRow()">Update</button>
+      <button type="button" onclick="closeForm()">Close</button>
+    </div>
+  </div>
+
+  <script>
+    var selectedRow;
+
+    // Function to open the form popup for editing a row
+    function editRow(button) {
+      selectedRow = button.parentNode.parentNode;
+      var cells = selectedRow.getElementsByTagName("td");
+      document.getElementById("edit_acnt_acap_id").value = cells[0].innerText;
+      document.getElementById("edit_acnt_acty_id").value = cells[1].innerText;
+      document.getElementById("edit_account_first_nominee").value = cells[2].innerText;
+      document.getElementById("edit_account_last_nominee").value = cells[3].innerText;
+      document.getElementById("edit_acnt_cust_id").value = cells[4].innerText;
+      document.getElementById("edit_acnt_cdate").value = cells[5].innerText;
+      document.getElementById("edit_account_createdBy").value = cells[6].innerText;
+      document.getElementById("edit_acnt_processedy").value = cells[7].innerText;
+      document.getElementById("edit_cust_Title").value = cells[8].innerText;
+      document.getElementById("edit_cust_phoneNo").value = cells[9].innerText;
+      document.getElementById("edit_cust_Current_address").value = cells[10].innerText;
+      document.getElementById("editForm").style.display = "block";
+    }
+
+    // Function to update the edited row
+   function updateRow() {
+  var cells = selectedRow.getElementsByTagName("td");
+  cells[0].innerText = document.getElementById("edit_acnt_acap_id").value;
+  cells[1].innerText = document.getElementById("edit_acnt_acty_id").value;
+  cells[2].innerText = document.getElementById("edit_account_first_nominee").value;
+  cells[3].innerText = document.getElementById("edit_account_last_nominee").value;
+  cells[4].innerText = document.getElementById("edit_acnt_cust_id").value;
+  cells[5].innerText = document.getElementById("edit_acnt_cdate").value;
+  cells[6].innerText = document.getElementById("edit_account_createdBy").value;
+  cells[7].innerText = document.getElementById("edit_acnt_processedy").value;
+  cells[8].innerText = document.getElementById("edit_cust_Title").value;
+  cells[9].innerText = document.getElementById("edit_cust_phoneNo").value;
+  cells[10].innerText = document.getElementById("edit_cust_Current_address").value;
+
+  // Prepare the data to send in the AJAX request
+  var customerId = document.getElementById("edit_acnt_cust_id").value;
+  var customerTitle = document.getElementById("edit_cust_Title").value;
+  var customerPhoneNo = document.getElementById("edit_cust_phoneNo").value;
+  var customerAddress = document.getElementById("edit_cust_Current_address").value;
+  
+  var requestData = {
+    CustomerId: customerId,
+    Title: customerTitle,
+    PhoneNo: customerPhoneNo,
+    Address: customerAddress
+  };
+
+  // Send the AJAX request
+  $.ajax({
+    url: 'savetocustomersubdatabase',
+    type: 'POST',
+    data: requestData,
+    success: function(response) {
+      // Handle the success response
+      console.log('Third server request success:', response);
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      // Handle the error
+      console.error('Third server request error:', textStatus, errorThrown);
+    }
+  });
+
+  closeForm();
+}
+
+
+    // Function to close the form popup
+    function closeForm() {
+      document.getElementById("editForm").style.display = "none";
+    }
+  </script>
+</body>
+</html>

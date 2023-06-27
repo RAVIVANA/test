@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+
+    <title>Loan Repayment</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .form-container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h3 {
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-control {
+            width: 300px;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+		
+    </style>
+</head>
+<body>
+<body>
+<h3>Loan Repayment</h3>
+    <div id="loan-repayment-form" class="form-container">
+        <div>
+            <div >
+                <form action="" method="post">
+                    <div class="form-group">
+                        <label for="loanid">Loan ID:</label>
+                        <input type="number" class="form-control" id="loanid" placeholder="Enter loan ID" name="loanid" oninput=validateAndProcessAccountNumber() required>
+                    </div>
+                  
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</body>
+ <div id="resulttable"></div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+ 
+ 
+//============================================================================
+    function validateAndProcessAccountNumber() {
+        var input = document.getElementById("loanid");
+        var value = input.value;
+        
+        // Validate the input
+        if (value.length > 1) {
+            input.value = value.slice(0, 1); // Restrict to one digit
+        }
+        
+        // Call your function here with the account number value
+        // Only if the input is valid and has a length of 1
+        if (value.length === 1) {
+            processAccountNumber(value);
+        }
+    }
+  
+ function processAccountNumber(accountNumber) {
+    document.getElementById('resulttable').innerHTML="";
+         	  $.ajax({
+         	    url:'getloanrepaytdetails',
+         	    method:'post',
+         	    data: { accountNumber: accountNumber },
+         	    success: function (resultText) {
+         	    	 $('#resulttable').html(resultText);
+         	    },
+         	    error: function (jqXHR, exception) {
+         	      console.log('Error occurred!');
+         	    }
+         	  })
+} 
+
+
+
+</script>
+
+
+</html>

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Table</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    .body {
+      font-family: Arial, sans-serif;
+      height: 100%;
+      padding-top:100px;
+      padding-left:100px;
+      justify-content: center;
+      align-items: center;
+    }
+  
+    h1 {
+      margin-bottom: 20px;
+    }
+  
+    table {
+      margin-bottom: 20px;
+    }
+  
+    table th,
+    table td {
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+  
+    #accountTypeModal,
+    #descriptionForm {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #f9f9f9;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+  
+    #accountTypeModal h2,
+    #descriptionForm h2 {
+      margin-top: 0;
+    }
+  
+    #accountTypeModal input[type="text"],
+    #accountTypeModal textarea,
+    #descriptionForm textarea {
+      width: 100%;
+      padding: 5px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      resize: vertical;
+    }
+  
+    #accountTypeModal button,
+    #descriptionForm button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+  
+    #accountTypeModal button:hover,
+    #descriptionForm button:hover {
+      background-color: #45a049;
+    }
+  
+    #accountTypeModal button[type="button"],
+    #descriptionForm button[type="button"] {
+      background-color: #f44336;
+    }
+  
+    #accountTypeModal button[type="button"]:hover,
+    #descriptionForm button[type="button"]:hover {
+      background-color: #d32f2f;
+    }
+  </style>
+</head>
+<div class="body">
+  <h1>Accounts</h1>
+
+  <table>
+    <tr>
+      <td><button onclick="showAccountTypeForm()">Add new Account Type</button></td>
+    </tr>
+    <tr>
+      <td>
+        Select a Account Type:
+        <select id="account-type" onclick="showRow()" value="selectaccount">
+          
+          <!-- Replace with Thymeleaf loop -->
+          <option>select</option>
+          <option th:each="account : ${accountTypes}" th:value="${account.getAccountId()}" th:text="${account.getAccountType()}"></option>
+        </select>
+        <div id="information"></div>
+      </td>
+    </tr>
+  </table>
+  
+  <br><br>
+  
+  <br><br>
+  
+  <table id="resultTable">
+        <thead>
+ 
+      <tr>
+        <th>ID</th>
+        <th>Loan Type</th>
+        <th>Description</th>
+      </tr>
+
+    </thead>
+    <tbody>
+      <!-- Iterate over the loanList and populate the table rows -->
+      <tr th:each="account : ${accounts}">
+        <td th:text="${account.getAccountId()}"></td>
+        <td th:text="${account.getAccountType()}"></td>
+        <td th:text="${account.getDescriptionForm()}"></td>
+      </tr>
+    </tbody>
+    
+  </table>
+  
+    <!-- Loan Type Modal -->
+  <div id="accountTypeModal" style="display: none;">
+    <div>
+      <h2>New Account Type</h2>
+      <form>
+        <table>
+          <tr>
+            <td>Account Type ID:</td>
+            <td><input type="number" id="account_id" name="account_id" required></td>
+          </tr>
+
+          <tr>
+            <td>Account Type Title:</td>
+            <td><input type="text" id="account_title" name="account_title" required></td>
+          </tr>
+        </table>
+
+        <button type="button" onclick="adddescription()">Add Description</button>
+        <button type="button" onclick="closeModal()">Cancel</button>
+      </form>
+    </div>
+  </div>
+  
+  <div id="descriptionForm" style="display: none;">
+    <div>
+      <h2>Description</h2>
+      <form>
+        <table>
+          <tr>
+            <td>Account Type Description:</td>
+            <td><textarea id="account_desc" name="account_desc" rows="4" cols="40"></textarea></td>
+          </tr>
+        </table>
+
+        <button type="button" onclick="saveAccountType()">Save</button>
+        <button type="button" onclick="closeModal()">Cancel</button>
+      </form>
+    </div>
+  </div>
+  
+  
+  <script>
+  
+  /*$(document).ready(function(){
+	  $.ajax({
+	    url: "get_loan_details",
+	    type: "GET",
+	    success: function(response) {
+	      $('#resultTable').html(response);
+	    },
+	    error: function(xhr, status, error) {
+	      // Handle error response
+	      console.log("Error occurred while retrieving loan types");
+	    }
+	  });
+	});*/
+  
+  function showRow() {
+      var accountType = document.getElementById("account-type").value;
+      
+      $.ajax({
+  	    url: "getselectedaccountdetails",
+  	    type: "GET",
+  	    data:{accountType:accountType},
+  	    success: function(response) {
+  	      $('#resultTable').html(response);
+  	    },
+  	    error: function(xhr, status, error) {
+  	  
+  	      console.log("Error occurred while retrieving account types");
+  	    }
+  	  });
+  	
+
+      // Hide all rows initially
+      $("#resultTable tbody tr").hide();
+
+      // Show rows that match the selected loan type
+      $("#resultTable tbody tr[data-account-type='" + accountType + "']").show();
+    }
+
+ 
+    function adddescription() {
+      var modal = document.getElementById("descriptionForm");
+      modal.style.display = "block";
+    }
+    
+    function showAccountTypeForm() {
+      var modal = document.getElementById("accountTypeModal");
+      modal.style.display = "block";
+    }
+
+    function closeModal() {
+      var modals = document.querySelectorAll("#accountTypeModal, #descriptionForm");
+      modals.forEach(function(modal) {
+        modal.style.display = "none";
+      });
+    }
+    $(document).ready(function(){
+    	  $.ajax({
+    	    url: "getaccounttypes",
+    	    type: "GET",
+    	    success: function(response) {
+    	      $('#account-type').html(response);
+    	    },
+    	    error: function(xhr, status, error) {
+    	      // Handle error response
+    	      console.log("Error occurred while retrieving account types");
+    	    }
+    	  });
+    	});
+
+
+    function saveAccountType() {
+      var accountId = document.getElementById("account_id").value;
+      var accountTitle = document.getElementById("account_title").value;
+      var accountDesc = document.getElementById("account_desc").value;
+      
+      var formData = {
+        AccountId: accountId,
+        AccountType: accountTitle,
+        DescriptionForm: accountDesc,
+      };
+      
+      $.ajax({
+        url: "accountdatasave",
+        type: "POST",
+        data: formData,
+        success: function(response) {
+          // Handle success response
+          console.log("Form data saved successfully");
+          location.reload();
+        },
+        error: function(xhr, status, error) {
+          // Handle error response
+          console.log("Error occurred while saving form data");
+          location.reload();
+
+        }
+      });
+
+      console.log('Account Type ID:', accountId);
+      console.log('Account Type Title:', accountTitle);
+      console.log('Account Type Description:', accountDesc);
+      
+      var table = document.getElementById("myTable");
+      var newRow = table.insertRow();
+
+      var cell1 = newRow.insertCell();
+      var cell2 = newRow.insertCell();
+      var cell3 = newRow.insertCell();
+
+      cell1.innerHTML = accountId;
+      cell2.innerHTML = accountTitle;
+      cell3.innerHTML = accountDesc;
+
+      addAccountTypeOption(accountTitle, accountTitle); // Add the new option
+
+      closeModal();
+    }
+    
+    function addAccountTypeOption(title, selectedAccountType) {
+      var accountTypeSelect = document.getElementById("account-type");
+      var option = document.createElement("option");
+      option.value = title.toLowerCase().replace(/\s+/g, "-");
+      option.text = title;
+      accountTypeSelect.add(option);
+
+      // Set the selected option if it matches the selectedLoanType
+      if (selectedAccountType && option.value === selectedAccountType.toLowerCase().replace(/\s+/g, "-")) {
+        option.selected = true;
+      }
+    }
+  </script>
+</div>
+</html>

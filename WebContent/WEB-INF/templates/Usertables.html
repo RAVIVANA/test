@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Bank Users</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        .form-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            overflow: auto;
+        }
+
+        .form-container {
+            max-width: 500px;
+            margin: 100px auto;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-container label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .form-container input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        .form-container button {
+            padding: 8px 16px;
+            border: none;
+            background-color: #4CAF50;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .form-container button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="dropdownContainer">
+            <h2>Bank Users</h2>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>user_id</th>
+                        <th>Title</th>
+                        <th>Designation</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="user, rowStat : ${bankUser}" id="row-${rowStat.index + 1}">
+                         <td data-column="busr_id" th:text="${user.getBusr_id()}"></td>
+                        <td data-column="busr_title" th:text="${user.getBusr_title()}"></td>
+                        <td data-column="busr_desg" th:text="${user.getBusr_desg()}"></td>
+                        <td data-column="busr_email" th:text="${user.getBusr_email()}"></td>
+                        <td>
+                            <button onclick="editRow(this)">Edit</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Form Popup -->
+   <div class="form-popup" id="editForm">
+        <div class="form-container">
+            <h3>Edit User</h3>
+            <label for="edit_busr_id">UserId:</label>
+            <input type="text" id="edit_busr_id" name="edit_busr_id">
+            <label for="edit_busr_title">Title:</label>
+            <input type="text" id="edit_busr_title" name="edit_busr_title">
+            <label for="edit_busr_desg">Designation:</label>
+            <input type="text" id="edit_busr_desg" name="edit_busr_desg">
+            <label for="edit_busr_email">Email:</label>
+            <input type="text" id="edit_busr_email" name="edit_busr_email">
+            <button type="button" onclick="updateRow()">Update</button>
+            <button type="button" onclick="closeForm()">Close</button>
+        </div>
+    </div>
+    <script>
+
+      var selectedRow;
+
+        function editRow(button) {
+            selectedRow = button.parentNode.parentNode;
+            var cells = selectedRow.getElementsByTagName("td");
+            document.getElementById("edit_busr_id").value = cells[0].innerText;
+            document.getElementById("edit_busr_title").value = cells[1].innerText;
+            document.getElementById("edit_busr_desg").value = cells[2].innerText;
+            document.getElementById("edit_busr_email").value = cells[3].innerText;
+            document.getElementById("editForm").style.display = "block";
+        }
+
+        function updateRow() {
+            var cells = selectedRow.getElementsByTagName("td");
+            
+            cells[0].innerText = document.getElementById("edit_busr_id").value;
+            cells[1].innerText = document.getElementById("edit_busr_title").value;
+            cells[2].innerText = document.getElementById("edit_busr_desg").value;
+            cells[3].innerText = document.getElementById("edit_busr_email").value;
+
+            var id = document.getElementById("edit_busr_id").value;
+            var title = document.getElementById("edit_busr_title").value;
+            var desg = document.getElementById("edit_busr_desg").value;
+            var email = document.getElementById("edit_busr_email").value;
+
+            var requestData = {
+            	Busr_id: id	,
+            	Busr_title: title,
+            	Busr_desg: desg,
+                Busr_email: email
+            };
+
+            $.ajax({
+                url: "updateuser",
+                method: "POST",
+                data: requestData,
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error("Error: " + textStatus, errorThrown);
+                }
+            });
+
+            closeForm();
+        }
+
+        function closeForm() {
+            document.getElementById("editForm").style.display = "none";
+            location.reload();
+        }
+    </script>
+</body>
+</html>

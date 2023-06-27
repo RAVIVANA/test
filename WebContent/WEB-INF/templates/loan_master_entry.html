@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Table</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      height: 100%;
+      padding-top:100px;
+      padding-left:100px;
+      justify-content: center;
+      align-items: center;
+    }
+  
+    h1 {
+      margin-bottom: 20px;
+    }
+  
+    table {
+      margin-bottom: 20px;
+    }
+  
+    table th,
+    table td {
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+  
+    #loanTypeModal,
+    #descriptionForm {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #f9f9f9;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+  
+    #loanTypeModal h2,
+    #descriptionForm h2 {
+      margin-top: 0;
+    }
+  
+    #loanTypeModal input[type="text"],
+    #loanTypeModal textarea,
+    #descriptionForm textarea {
+      width: 100%;
+      padding: 5px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      resize: vertical;
+    }
+  
+    #loanTypeModal button,
+    #descriptionForm button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+  
+    #loanTypeModal button:hover,
+    #descriptionForm button:hover {
+      background-color: #45a049;
+    }
+  
+    #loanTypeModal button[type="button"],
+    #descriptionForm button[type="button"] {
+      background-color: #f44336;
+    }
+  
+    #loanTypeModal button[type="button"]:hover,
+    #descriptionForm button[type="button"]:hover {
+      background-color: #d32f2f;
+    }
+  </style>
+</head>
+<body>
+  <h1>Loans</h1>
+
+  <table>
+    <tr>
+      <td><button onclick="showLoanTypeForm()">Add new Loan Type</button></td>
+    </tr>
+    <tr>
+      <td>
+        Select a Loan Type:
+        <select id="loan-type" onclick="showRow()" value="selectLoan">
+          <option value="">Select...</option>
+          <!-- Replace with Thymeleaf loop -->
+          <option th:each="loan : ${loanTypes}" th:value="${loan.getLoanId()}" th:text="${loan.getLoanType()}" ></option>
+        </select>
+        <div id="information"></div>
+      </td>
+    </tr>
+  </table>
+  
+  <br><br>
+ 
+  <table id="myTable" hidden>
+    <tr>
+      <th>id</th>
+      <th>type</th>
+      <th>desc</th>
+    </tr>
+  </table>
+  
+  <br><br>
+  
+  <table id="resultTable">
+        <thead>
+ 
+      <tr>
+        <th>ID</th>
+        <th>Loan Type</th>
+        <th>Description</th>
+      </tr>
+
+    </thead>
+    <tbody>
+      <!-- Iterate over the loanList and populate the table rows -->
+      <tr th:each="loan : ${loans}">
+        <td th:text="${loan.getLoanId()}"></td>
+        <td th:text="${loan.getLoanType()}"></td>
+        <td th:text="${loan.getDescriptionForm()}"></td>
+      </tr>
+    </tbody>
+    
+  </table>
+  
+    <!-- Loan Type Modal -->
+  <div id="loanTypeModal" style="display: none;">
+    <div>
+      <h2>New Loan Type</h2>
+      <form>
+        <table>
+          <tr>
+            <td>Loan Type ID:</td>
+            <td><input type="number" id="loan_id" name="loan_id" required></td>
+          </tr>
+
+          <tr>
+            <td>Loan Type Title:</td>
+            <td><input type="text" id="loan_title" name="loan_title" required></td>
+          </tr>
+        </table>
+
+        <button type="button" onclick="adddescription()">Add Description</button>
+        <button type="button" onclick="closeModal()">Cancel</button>
+      </form>
+    </div>
+  </div>
+  
+  <div id="descriptionForm" style="display: none;">
+    <div>
+      <h2>Description</h2>
+      <form>
+        <table>
+          <tr>
+            <td>Loan Type Description:</td>
+            <td><textarea id="loan_desc" name="loan_desc" rows="4" cols="40"></textarea></td>
+          </tr>
+        </table>
+
+        <button type="button" onclick="saveLoanType()">Save</button>
+        <button type="button" onclick="closeModal()">Cancel</button>
+      </form>
+    </div>
+  </div>
+  
+  
+  <script>
+  
+  /*$(document).ready(function(){
+	  $.ajax({
+	    url: "get_loan_details",
+	    type: "GET",
+	    success: function(response) {
+	      $('#resultTable').html(response);
+	    },
+	    error: function(xhr, status, error) {
+	      // Handle error response
+	      console.log("Error occurred while retrieving loan types");
+	    }
+	  });
+	});*/
+  
+  function showRow() {
+      var loanType = document.getElementById("loan-type").value;
+      
+      $.ajax({
+  	    url: "getselectedloandetails",
+  	    type: "GET",
+  	    data:{loanType:loanType},
+  	    success: function(response) {
+  	      $('#resultTable').html(response);
+  	    },
+  	    error: function(xhr, status, error) {
+  	      // Handle error response
+  	      console.log("Error occurred while retrieving loan types");
+  	    }
+  	  });
+  	
+
+      // Hide all rows initially
+      $("#resultTable tbody tr").hide();
+
+      // Show rows that match the selected loan type
+      $("#resultTable tbody tr[data-loan-type='" + loanType + "']").show();
+    }
+
+ 
+    function adddescription() {
+      var modal = document.getElementById("descriptionForm");
+      modal.style.display = "block";
+    }
+    
+    function showLoanTypeForm() {
+      var modal = document.getElementById("loanTypeModal");
+      modal.style.display = "block";
+    }
+
+    function closeModal() {
+      var modals = document.querySelectorAll("#loanTypeModal, #descriptionForm");
+      modals.forEach(function(modal) {
+        modal.style.display = "none";
+      });
+    }
+    $(document).ready(function(){
+    	  $.ajax({
+    	    url: "getloantypes",
+    	    type: "GET",
+    	    success: function(response) {
+    	      $('#loan-type').html(response);
+    	    },
+    	    error: function(xhr, status, error) {
+    	      // Handle error response
+    	      console.log("Error occurred while retrieving loan types");
+    	    }
+    	  });
+    	});
+
+
+    function saveLoanType() {
+      var loanId = document.getElementById("loan_id").value;
+      var loanTitle = document.getElementById("loan_title").value;
+      var loanDesc = document.getElementById("loan_desc").value;
+      
+      var formData = {
+        LoanId: loanId,
+        LoanType: loanTitle,
+        DescriptionForm: loanDesc,
+      };
+      
+      $.ajax({
+        url: "loandatasave",
+        type: "POST",
+        data: formData,
+        success: function(response) {
+          
+          console.log("Form data saved successfully");
+          location.reload();
+
+        },
+        error: function(xhr, status, error) {
+          // Handle error response
+          console.log("Error occurred while saving form data");
+        }
+      });
+
+      console.log('Loan Type ID:', loanId);
+      console.log('Loan Type Title:', loanTitle);
+      console.log('Loan Type Description:', loanDesc);
+      
+      var table = document.getElementById("myTable");
+      var newRow = table.insertRow();
+
+      var cell1 = newRow.insertCell();
+      var cell2 = newRow.insertCell();
+      var cell3 = newRow.insertCell();
+
+      cell1.innerHTML = loanId;
+      cell2.innerHTML = loanTitle;
+      cell3.innerHTML = loanDesc;
+
+      addLoanTypeOption(loanTitle, loanTitle); // Add the new option
+
+      closeModal();
+    }
+    
+    function addLoanTypeOption(title, selectedLoanType) {
+      var loanTypeSelect = document.getElementById("loan-type");
+      var option = document.createElement("option");
+      option.value = title.toLowerCase().replace(/\s+/g, "-");
+      option.text = title;
+      loanTypeSelect.add(option);
+
+      // Set the selected option if it matches the selectedLoanType
+      if (selectedLoanType && option.value === selectedLoanType.toLowerCase().replace(/\s+/g, "-")) {
+        option.selected = true;
+      }
+    }
+  </script>
+</body>
+</html>

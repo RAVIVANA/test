@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Audit Logs</title>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<style>
+.body {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-height: 100vh;
+}
+
+.container {
+	width: 800px;
+	padding: 20px;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+table {
+	width: 100%;
+}
+
+th, td {
+	padding: 8px;
+	text-align: left;
+	border-bottom: 1px solid #ddd;
+}
+
+h1 {
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+.pagination {
+	display: flex;
+	justify-content: center;
+	margin-top: 20px;
+}
+
+.pagination a {
+	margin: 0 5px;
+	padding: 5px 10px;
+	text-decoration: none;
+	color: #333;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+
+.pagination a.active {
+	background-color: #ccc;
+}
+</style>
+</head>
+<div class="body">
+	<div class="container">
+		<h1>Audit Logs</h1>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Event</th>
+					<th>Timestamp</th>
+					<th>Username</th>
+				</tr>
+			</thead>
+			<tbody>
+				<!-- Loop through the list of audit logs and populate the table rows -->
+				<tr th:each="auditLog : ${auditLogs}">
+					<td th:text="${auditLog.id}"></td>
+					<td th:text="${auditLog.event}"></td>
+					<td th:text="${auditLog.timestamp}"></td>
+					<td th:text="${auditLog.username}"></td>
+				</tr>
+			</tbody>
+		</table>
+		<!-- Pagination -->
+		<div class="pagination">
+			<a th:if="${currentPage > 0}"
+				th:href="@{|/auditLogs?page=${currentPage-1}|}">&laquo; Previous</a>
+			<a th:each="pageNumber :   ${pageNumbers}"
+				th:href="@{|/auditLogs?page=${pageNumber}|}"
+				th:class="${pageNumber == currentPage} ? 'active' : ''"
+				th:text="${pageNumber + 1}"></a> <a
+				th:if="${currentPage < totalPages - 1}"
+				th:href="@{|/auditLogs?page=${currentPage+1}|}">Next &raquo;</a>
+		</div>
+	</div>
+</div>
+<script>
+
+</script>
+</html>
